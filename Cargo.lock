@@ -1373,7 +1373,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mondo-db-rust"
+name = "mongo-db-rust"
 version = "0.1.0"
 dependencies = [
  "dotenv",
