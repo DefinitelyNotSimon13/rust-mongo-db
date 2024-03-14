@@ -1,4 +1,4 @@
-use crate::{models::user_model::User, repository::mongodb_repo::MongoRepo};
+use crate::{models::user_model::User, repository::mongo_repo::MongoRepo};
 use mongodb::{bson::oid::ObjectId, results::InsertOneResult};
 use rocket::{http::Status, serde::json::Json, State};
 
@@ -9,6 +9,7 @@ pub fn create_user(
 ) -> Result<Json<InsertOneResult>, Status> {
     let data = User {
         id: None,
+        index: None,
         name: new_user.name.to_owned(),
         location: new_user.location.to_owned(),
         title: new_user.title.to_owned(),
@@ -45,6 +46,7 @@ pub fn update_user(
     };
     let data = User {
         id: Some(ObjectId::parse_str(&id).unwrap()),
+        index: new_user.index.to_owned(),
         name: new_user.name.to_owned(),
         location: new_user.location.to_owned(),
         title: new_user.title.to_owned(),

@@ -1,34 +1,24 @@
-use std::env;
-extern crate dotenv;
-use dotenv::dotenv;
-
 use crate::models::user_model::User;
+use crate::repository::mongo_repo::MongoRepo;
+
 use mongodb::{
     bson::{doc, extjson::de::Error, oid::ObjectId},
-    results::{InsertOneResult, UpdateResult, DeleteResult},
-    sync::{Client, Collection},
+    results::{DeleteResult, InsertOneResult, UpdateResult},
 };
 
-pub struct MongoRepo {
-    user_collection: Collection<User>,
-}
-
 impl MongoRepo {
-    pub fn init() -> Self {
-        dotenv().ok();
-        let uri = match env::var("MONGOURI") {
-            Ok(v) => v.to_string(),
-            Err(_) => "Error loading env variable!".to_string(),
-        };
-        let client = Client::with_uri_str(uri).unwrap();
-        let db = client.database("rustDB");
-        let user_collection: Collection<User> = db.collection("User");
-        MongoRepo { user_collection }
-    }
-
     pub fn create_user(&self, new_user: User) -> Result<InsertOneResult, Error> {
+        let document_count: i64 = match self.user_collection.estimated_document_count(None) {
+            Ok(count) => count.try_into().unwrap(),
+            Err(_) => -1,
+        };
+        if document_count == -1 {
+            panic!("Error counting documents");
+        }
+
         let new_document = User {
             id: None,
+            index: Some(document_count + 1),
             name: new_user.name,
             location: new_user.location,
             title: new_user.title,
@@ -57,6 +47,7 @@ impl MongoRepo {
             "$set":
             {
                 "id": new_user.id,
+                "index": new_user.index,
                 "name": new_user.name,
                 "location": new_user.location,
                 "title": new_user.title
@@ -87,6 +78,4 @@ impl MongoRepo {
         let users = cursors.map(|doc| doc.unwrap()).collect();
         Ok(users)
     }
-
-
 }

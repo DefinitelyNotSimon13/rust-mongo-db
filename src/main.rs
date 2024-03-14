@@ -6,8 +6,20 @@ mod repository;
 extern crate rocket;
 use rocket::{get, http::Status, serde::json::Json};
 
-use api::user_api::{create_user, delete_user, get_all_users, get_user, update_user};
-use repository::mongodb_repo::MongoRepo;
+use api::{
+    user_api::{
+        create_user,
+        delete_user,
+        get_all_users,
+        get_user,
+        update_user
+    },
+    project_api::{
+        create_project,
+        get_project,
+    }
+};
+use repository::mongo_repo::MongoRepo;
 
 #[get("/")]
 fn index() -> Result<Json<String>, Status> {
@@ -25,7 +37,9 @@ fn rocket() -> _ {
             get_user,
             update_user,
             delete_user,
-            get_all_users
+            get_all_users,
+            create_project,
+            get_project
         ],
     )
 }
