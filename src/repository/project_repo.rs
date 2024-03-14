@@ -10,7 +10,7 @@ impl MongoRepo {
     pub fn create_project(&self, new_project: Project) -> Result<InsertOneResult, Error> {
         let document_count: i64 = match self.project_collection.estimated_document_count(None) {
             Ok(count) => count.try_into().unwrap(),
-            Err(e) => -1,
+            Err(_) => -1,
         };
         if document_count == -1 {
             panic!("Error counting documents");

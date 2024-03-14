@@ -1,0 +1,97 @@
+<html>
+<head>
+    <title>MongoDB - Rust</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+<body>
+        <h1>Hello, there!</h1> 
+        <form hx-post="http://127.0.0.1:8000/project/add" hx-ext='json-enc' hx-target="#status"> 
+            <input type="text" name="name" placeholder="Name"><br>
+            <input type="text" name="description" placeholder="Description"><br>
+            <input type="text" name="language" placeholder="Language"><br>
+            <input type="number" name="major_version" placeholder="Major Version"><br>
+            <input type="number" name="minor_version" placeholder="Minor Version"><br>
+            <input type="number" name="patch_version" placeholder="Patch Version"><br>
+            <input type="text" name="category" placeholder="Category"><br>
+            <input type="text" name="github_repo" placeholder="Github Repo"><br>
+            <input type="submit" value="Submit"><br>
+            <p id="status">Status</p>
+        <p>Click the button to get project data from the MongoDB</p>
+        <button hx-get="http://127.0.0.1:8000/project/all" hx-target="#projects" onclick="enableButtons()">Get Project</button>
+        <button id="display" onclick="displayProjects()">Prettify Json</button>
+        <button id="prettify" onclick="formatProjects()">Format Output</button>
+        <br>
+        <div id="projects"></div>
+        <pre id="projectJson"></pre>
+        <ul id="projectList"></ul>
+
+        
+
+<script>
+        function enableButtons(){
+            let displayButton = document.getElementById('display');
+            let prettifyButton = document.getElementById('prettify');
+            let projectJson = document.getElementById('projectJson');
+            let projectList = document.getElementById('projectList');
+            projectJson.textContent = '';
+            projectList.innerHTML = '';
+            displayButton.disabled = false;
+            prettifyButton.disabled = false;
+        }
+    function displayProjects(){
+        let displayButton = document.getElementById('display');
+        let prettifyButton = document.getElementById('prettify');
+        let projectsDiv = document.getElementById('projects');
+        let projectJson = document.getElementById('projectJson');
+        let projectList = document.getElementById('projectList');
+        let json = JSON.parse(projectsDiv.innerHTML);
+        projectsDiv.innerHTML = '';
+        projectList.innerHTML = '';
+
+        displayButton.disabled = true;
+        prettifyButton.disabled = true;
+
+        projectJson.textContent = JSON.stringify(json, undefined, 2);
+    }
+    function formatProjects() {
+        let displayButton = document.getElementById('display');
+        let prettifyButton = document.getElementById('prettify');
+        let projectsDiv = document.getElementById('projects');
+        let projectList = document.getElementById('projectList');
+        let projectJson = document.getElementById('projectJson');
+        let projects = projectsDiv.innerHTML;
+        projectsDiv.innerHTML = '';
+        projectJson.textContent = '';
+        displayButton.disabled = true;
+        prettifyButton.disabled = true;
+        JSON.parse(projects).forEach(project => {
+            let listItem = document.createElement('li');
+            let details = document.createElement('details');
+            let summary = document.createElement('summary');
+            let detailList = document.createElement('ul');
+            let description = document.createElement('li');
+            let language = document.createElement('li');
+            let version = document.createElement('li');
+            let github_repo = document.createElement('li');
+            let github_repo_link = document.createElement('a');
+            summary.innerHTML = project.name;
+            language.innerHTML = `Language: ${project.language}`;
+            description.innerHTML = `Description: ${project.description}`;
+            version.innerHTML = `Version: ${project.major_version}.${project.minor_version}.${project.patch_version}`;
+            github_repo_link.innerHTML= `Github Repo`;
+            github_repo_link.href = project.github_repo;
+            github_repo.appendChild(github_repo_link);
+            listItem.appendChild(details);
+            details.appendChild(summary);
+            detailList.appendChild(description);
+            detailList.appendChild(language);
+            detailList.appendChild(version);
+            detailList.appendChild(github_repo);
+            details.appendChild(detailList);
+            projectList.appendChild(listItem);
+        });
+    }
+</script>
+</body>
+</html>

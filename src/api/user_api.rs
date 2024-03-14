@@ -21,6 +21,15 @@ pub fn create_user(
     }
 }
 
+#[get("/user/all")]
+pub fn get_all_users(db: &State<MongoRepo>) -> Result<Json<Vec<User>>, Status> {
+    let users = db.get_all_users();
+    match users{
+        Ok(users) => Ok(Json(users)),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
 #[get("/user/<path>")]
 pub fn get_user(db: &State<MongoRepo>, path: String) -> Result<Json<User>, Status> {
     let id = path;
@@ -87,14 +96,6 @@ pub fn delete_user(db: &State<MongoRepo>, path: String) -> Result<Json<&str>, St
     }
 }
 
-#[get("/user/all")]
-pub fn get_all_users(db: &State<MongoRepo>) -> Result<Json<Vec<User>>, Status> {
-    let users = db.get_all_users();
-    match users{
-        Ok(users) => Ok(Json(users)),
-        Err(_) => Err(Status::InternalServerError),
-    }
-}
 
 
 

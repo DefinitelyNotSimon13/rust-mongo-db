@@ -9,9 +9,9 @@ pub struct Project{
     pub name: String,
     pub description: String,
     pub language: String,
-    pub major_version: u32,
-    pub minor_version: u32,
-    pub patch_version: u32,
+    pub major_version: String,
+    pub minor_version: String,
+    pub patch_version: String,
     pub category: String,
     pub github_repo: String,
 }

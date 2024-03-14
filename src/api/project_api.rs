@@ -26,6 +26,15 @@ pub fn create_project(
     }
 }
 
+#[get("/project/all")]
+pub fn get_all_projects(db: &State<MongoRepo>) -> Result<Json<Vec<Project>>, Status> {
+    let projects = db.get_all_projects();
+    match projects{
+        Ok(projects) => Ok(Json(projects)),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
 #[get("/project/<path>")]
 pub fn get_project(db: &State<MongoRepo>, path:String) -> Result<Json<Project>, Status> {
     let id = path;
