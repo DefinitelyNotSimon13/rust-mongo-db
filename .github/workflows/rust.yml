@@ -19,7 +19,7 @@ jobs:
     - name: Create .env
       run: echo "MONGOURI=${{ secrets.MONGO_DB_CONNECT }}" > .env
     - name: Test (List files)
-      run: ls
+      run: ls -a
     - name: Build
       run: cargo build --verbose
     - name: Run tests
