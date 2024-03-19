@@ -40,6 +40,16 @@ impl MongoRepo {
         Ok(user_details.unwrap())
     }
 
+    pub fn query_username(&self, query: &String) -> Result<Vec<User>, Error> {
+        let filter = doc! {"name": query};
+        let cursors = self
+            .user_collection
+            .find(filter, None)
+            .expect("Error getting user's details!"); 
+        let users = cursors.map(|doc| doc.unwrap()).collect();
+        Ok(users)
+    }
+
     pub fn update_user(&self, id: &String, new_user: User) -> Result<UpdateResult, Error> {
         let object_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": object_id};

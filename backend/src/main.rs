@@ -13,8 +13,8 @@ use rocket::{
 };
 
 use api::{
-    project_api::{create_project, get_all_projects, get_project},
-    user_api::{create_user, delete_user, get_all_users, get_user, update_user},
+    project_api::{create_project, delete_project, get_all_projects, get_project, update_project},
+    user_api::{create_user, delete_user, get_all_users, get_user,get_user_by_name, update_user},
 };
 use repository::mongo_repo::MongoRepo;
 
@@ -65,9 +65,12 @@ fn rocket() -> _ {
                 update_user,
                 delete_user,
                 get_all_users,
+                get_user_by_name,
                 create_project,
                 get_project,
-                get_all_projects
+                get_all_projects,
+                delete_project,
+                update_project
             ],
         )
         .attach(CORS)

@@ -43,6 +43,15 @@ pub fn get_user(db: &State<MongoRepo>, path: String) -> Result<Json<User>, Statu
     }
 }
 
+#[get("/user/search/<name>")]
+pub fn get_user_by_name(db: &State<MongoRepo>, name: String) -> Result<Json<Vec<User>>, Status> {
+    let users = db.query_username(&name);
+    match users {
+        Ok(users) => Ok(Json(users)),
+        Err(_) => Err(Status::InternalServerError),
+    }
+}
+
 #[put("/user/<path>", data = "<new_user>")]
 pub fn update_user(
     db: &State<MongoRepo>,
