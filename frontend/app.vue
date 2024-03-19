@@ -1,6 +1,7 @@
+<style lang="scss">
+  @import 'assets/scss/main.scss';
+</style>
 <template>
-  <div>
-    
-  </div>
+  <div />
   <NuxtPage />
 </template>

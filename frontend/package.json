@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -10,8 +12,19 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@oruga-ui/oruga-next": "^0.8.6",
+    "@oruga-ui/theme-bulma": "^0.3.0",
+    "@oruga-ui/theme-oruga": "^0.2.2",
     "nuxt": "^3.11.1",
+    "nuxt-buefy": "^0.4.28",
+    "postcss": "^8.4.36",
+    "scss": "^0.2.4",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^0.2.0",
+    "eslint": "^8.57.0",
+    "sass": "^1.72.0"
   }
 }

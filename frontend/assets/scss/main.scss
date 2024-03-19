@@ -1,0 +1,11 @@
+@use 'colors.scss' as *;
+@use 'oruga.scss' as *;
+
+body {
+    background-color: $bg-1;
+    color: $fg-1;
+}
+
+h1 {
+    color: $primary-1;
+}
